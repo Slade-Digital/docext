@@ -22,7 +22,7 @@ def parse_args():
     parser.add_argument(
         "--model_name",
         type=str,
-        default="hosted_vllm/Qwen/Qwen2.5-VL-7B-Instruct-AWQ",
+        default="hosted_vllm/Qwen/Qwen2.5-VL-3B-Instruct-AWQ",
         help="Name of the model to use. Use 'ollama/' prefix for OLLAMA models and 'hosted_vllm/' prefix for hosted vLLM models.",
     )
     parser.add_argument(

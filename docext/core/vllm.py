@@ -19,7 +19,7 @@ class VLLMServer:
         max_model_len: int = 15000,
         gpu_memory_utilization: float = 0.98,
         max_num_imgs: int = 5,
-        vllm_start_timeout: int = 300,
+        vllm_start_timeout: int = 600,
         dtype: str = "bfloat16",
     ):
         self.host = host

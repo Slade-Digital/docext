@@ -10,7 +10,7 @@ import pandas as pd
 from loguru import logger
 
 from docext.core.client import sync_request
-from docext.core.confidence import get_fields_confidence_score_messages_binary
+from docext.core.confidence import get_fields_confidence_score_messages_numeric
 from docext.core.prompts import get_fields_messages
 from docext.core.prompts import get_tables_messages
 from docext.core.utils import convert_files_to_images
@@ -42,7 +42,7 @@ def extract_fields_from_documents(
     logger.info(f"Response: {response}")
 
     # conf score
-    messages = get_fields_confidence_score_messages_binary(
+    messages = get_fields_confidence_score_messages_numeric(
         messages,
         response,
         field_names,
@@ -51,7 +51,7 @@ def extract_fields_from_documents(
     format_fields_conf_score = {
         "type": "object",
         "properties": {
-            field_name: {"type": "string", "enum": ["High", "Low"]}
+            field_name: {"type": "integer", "minimum": 0, "maximum": 100}
             for field_name in field_names
         },
     }
