@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import os
-import signal
 import subprocess
 import threading
 import time
@@ -16,10 +14,10 @@ class VLLMServer:
         model_name: str,
         host: str = "0.0.0.0",
         port: int = 8000,
-        max_model_len: int = 15000,
+        max_model_len: int = 25000,
         gpu_memory_utilization: float = 0.98,
-        max_num_imgs: int = 5,
-        vllm_start_timeout: int = 600,
+        max_num_imgs: int = 10,
+        vllm_start_timeout: int = 1000,
         dtype: str = "bfloat16",
     ):
         self.host = host

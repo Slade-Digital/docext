@@ -9,7 +9,7 @@ from litellm import completion
 def sync_request(
     messages: list[dict],
     model_name: str = "hosted_vllm/Qwen/Qwen2.5-VL-3B-Instruct",
-    max_tokens: int = 5000,
+    max_tokens: int = 12000,
     num_completions: int = 1,
     format: dict | None = None,
 ):
@@ -24,6 +24,7 @@ def sync_request(
         "max_tokens": max_tokens,
         "n": num_completions,
         "temperature": 0,
+        "top_p": 0.95,  # Slightly increase diversity for better field coverage
         "api_base": vlm_url
         if model_name.startswith("hosted_vllm/") or model_name.startswith("ollama/")
         else None,

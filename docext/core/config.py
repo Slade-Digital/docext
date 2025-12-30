@@ -62,6 +62,10 @@ TEMPLATES_FIELDS = {
             "description": "Alternate business names that appear after DBA indicators in the Named Insured field. Extract all names that come after 'DBA:', 'DBA', 'D/B/A:', 'D/B/A', 'doing business as', or 'aka'. If multiple DBAs are listed, separate them with commas. If no DBA indicator exists, return ''.",
         },
         {
+            "field_name": "business_phone",
+            "description": "The business phone number found anywhere on the form, including in the Named Insured section, contact information area, or phone fields. Look for labels like 'Phone', 'Tel', 'Business Phone', or phone number patterns like (XXX) XXX-XXXX. If multiple numbers exist, use the primary business number. If not found, return ''.",
+        },
+        {
             "field_name": "mailing_street",
             "description": "The street address (number and street name) from the mailing address. Example: '123 Main St' or '456 Oak Avenue'. Do not include suite/unit numbers, city, state, or ZIP.",
         },
@@ -88,10 +92,6 @@ TEMPLATES_FIELDS = {
         {
             "field_name": "proposed_exp_date",
             "description": "The proposed expiration date found in the 'POLICY PERIOD' section, usually labeled as 'TO' or 'Expiration Date'. Return in MM/DD/YYYY format.",
-        },
-        {
-            "field_name": "business_phone",
-            "description": "The business phone number found anywhere on the form, including in the Named Insured section, contact information area, or phone fields. Look for labels like 'Phone', 'Tel', 'Business Phone', or phone number patterns like (XXX) XXX-XXXX. If multiple numbers exist, use the primary business number. If not found, return ''.",
         },
         {
             "field_name": "primary_business_operations",
