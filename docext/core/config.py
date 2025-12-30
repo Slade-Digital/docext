@@ -55,11 +55,11 @@ TEMPLATES_FIELDS = {
     "accord 📄": [
         {
             "field_name": "insured_name",
-            "description": "The full legal name of the named insured from the 'NAMED INSURED' section. Extract only the name, do not include the address.",
+            "description": "The primary legal entity name from the 'NAMED INSURED' section. Extract ONLY the main company name BEFORE any 'DBA:', 'D/B/A:', 'aka', or similar indicators. Stop at the first comma, semicolon, or DBA indicator. Example: if the field shows 'Xander Bicycle Corp, DBA: Retrospec Bicycles', extract only 'Xander Bicycle Corp'.",
         },
         {
             "field_name": "dba_names",
-            "description": "All 'Doing Business As' (DBA) names, trade names, or alternate business names associated with the named insured. Look for indicators like 'DBA:', 'D/B/A:', 'doing business as', 'aka', 'also known as', or additional company names after semicolons, commas, or in parentheses following the legal name. Return as comma-separated list if multiple DBAs exist, or return empty string '' if no DBAs are present.",
+            "description": "Extract ONLY the alternate business names that appear AFTER 'DBA:', 'D/B/A:', 'doing business as', 'aka', 'also known as', semicolons, or commas in the named insured field. Do NOT include the primary legal name. Return as comma-separated list. Example: if the field shows 'Xander Bicycle Corp, DBA: Retrospec Bicycles, Critical Cycles', extract 'Retrospec Bicycles, Critical Cycles'. If no DBA indicators are present, return empty string ''.",
         },
         {
             "field_name": "mailing_street",
@@ -97,6 +97,10 @@ TEMPLATES_FIELDS = {
             "field_name": "primary_business_operations",
             "description": "The description of the insured's primary business operations or business type, typically found in the 'DESCRIPTION OF OPERATIONS' section or 'Business Description' field. Include the complete business activity description.",
         },
+        {
+            "field_name": "premises_json",
+            "description": "Extract ALL premise locations from the 'PREMISES', 'LOCATIONS', or 'SCHEDULE OF LOCATIONS' section as a JSON array. Each premise should be an object with these keys: 'premise_type' (location designation like 'Main Office', 'Branch', or empty string if not stated), 'premise_street' (street address), 'premise_street2' (suite/unit or empty string), 'premise_city', 'premise_state' (2-letter code), 'premise_zip', 'premise_description' (additional notes or empty string). Do NOT include the mailing address from the Named Insured section. Only extract locations explicitly listed in the premises/locations section. If no premises are listed, return empty array []. Example format: [{\"premise_type\": \"Main Office\", \"premise_street\": \"123 Main St\", \"premise_street2\": \"\", \"premise_city\": \"New York\", \"premise_state\": \"NY\", \"premise_zip\": \"10001\", \"premise_description\": \"\"}]",
+        },
     ],
 }
 
@@ -118,34 +122,5 @@ TEMPLATES_TABLES = {
         {"field_name": "Total Price", "description": "Total price of the product"},
         {"field_name": "tax", "description": "tax amount"},
     ],
-    "accord 📄": [
-        {
-            "field_name": "premise_type",
-            "description": "Extract the location type or designation (such as 'Main Office', 'Main Garage', 'Branch', 'Warehouse') if present in the premise information. If the cell only contains an address with no type designation, return empty string.",
-        },
-        {
-            "field_name": "premise_street",
-            "description": "The street address (number and street name) from each premise location. Example: '123 Main St' or '456 Oak Avenue'. Do not include suite/unit numbers, city, state, or ZIP.",
-        },
-        {
-            "field_name": "premise_street2",
-            "description": "The secondary address line such as suite, unit, building, or floor number. Example: 'Suite 200' or 'Bldg 1'. Return empty string if not provided.",
-        },
-        {
-            "field_name": "premise_city",
-            "description": "The city name from the premise address. Example: 'New York' or 'Boston'.",
-        },
-        {
-            "field_name": "premise_state",
-            "description": "The state abbreviation from the premise address. Example: 'NY' or 'CA'. Use 2-letter state code.",
-        },
-        {
-            "field_name": "premise_zip",
-            "description": "The ZIP code from the premise address. Example: '10001' or '02134-1234'. Include the full ZIP+4 if present.",
-        },
-        {
-            "field_name": "premise_description",
-            "description": "Any additional description or notes about the premise location beyond the type and address. Return empty string if not provided.",
-        },
-    ],
+    "accord 📄": [],
 }

@@ -185,10 +185,33 @@ def format_for_insurance_system(
 
     # Map fields to insurance categories
     if not fields_df.empty:
+        import json
+
         for _, row in fields_df.iterrows():
             field_name = row['fields']
             field_value = row['answer']
             field_confidence = row['confidence']
+
+            # Handle premises_json specially
+            if field_name == 'premises_json':
+                try:
+                    # Parse the JSON array from the field
+                    if field_value and field_value.strip():
+                        premises_list = json.loads(field_value)
+                        if isinstance(premises_list, list):
+                            result["premises"] = premises_list
+                        else:
+                            result["premises"] = []
+                    else:
+                        result["premises"] = []
+                except (json.JSONDecodeError, ValueError):
+                    # If JSON parsing fails, store as empty array
+                    result["premises"] = []
+                    result["metadata"]["premises_parse_error"] = {
+                        "value": field_value,
+                        "confidence": field_confidence
+                    }
+                continue
 
             field_data = {
                 "value": field_value,
@@ -210,8 +233,8 @@ def format_for_insurance_system(
             else:
                 result["metadata"][field_name] = field_data
 
-    # Add premises from table
-    if not tables_df.empty:
+    # Legacy: Add premises from table (if using old table-based extraction)
+    if not tables_df.empty and not result["premises"]:
         result["premises"] = tables_df.to_dict(orient="records")
 
     return result
