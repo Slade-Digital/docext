@@ -115,10 +115,60 @@ def extract_tables_from_documents(
     response = sync_request(messages, model_name)["choices"][0]["message"]["content"]
     logger.info(f"Response: {response}")
 
-    response = response[response.index("|") : response.rindex("|") + 1]
-    df = mdpd.from_md(response)
+    try:
+        # Extract markdown table from response
+        if "|" not in response:
+            logger.warning("No table found in response, returning empty DataFrame")
+            return pd.DataFrame(columns=columns_names)
 
-    return df
+        # Extract only the first complete table from response
+        table_start = response.index("|")
+        # Find the end of the first table (double newline or next section)
+        remaining = response[table_start:]
+
+        # Split by double newlines to isolate first table
+        table_parts = remaining.split("\n\n")
+        first_table = table_parts[0] if table_parts else remaining
+
+        # Clean up: remove excessive pipes (likely parsing errors)
+        lines = first_table.split("\n")
+        cleaned_lines = []
+        for line in lines:
+            # Count pipes - if way too many, skip this line
+            pipe_count = line.count("|")
+            if pipe_count > len(columns_names) * 10:  # Reasonable threshold
+                logger.warning(f"Skipping malformed line with {pipe_count} pipes")
+                continue
+            cleaned_lines.append(line)
+
+        first_table = "\n".join(cleaned_lines)
+
+        df = mdpd.from_md(first_table)
+
+        # Validate column count
+        if len(df.columns) != len(columns_names):
+            logger.warning(
+                f"Column mismatch: expected {len(columns_names)} columns {columns_names}, "
+                f"but got {len(df.columns)} columns. Attempting to fix..."
+            )
+            # If we got way more columns than expected, likely a parsing error
+            if len(df.columns) > len(columns_names) * 2:
+                logger.error(
+                    f"Severe column mismatch (got {len(df.columns)} columns). "
+                    "Returning empty DataFrame."
+                )
+                return pd.DataFrame(columns=columns_names)
+
+            # Try to salvage by taking first N columns
+            df = df.iloc[:, :len(columns_names)]
+            df.columns = columns_names
+
+        return df
+
+    except Exception as e:
+        logger.error(f"Error parsing table from response: {e}")
+        logger.error(f"Raw response: {response}")
+        return pd.DataFrame(columns=columns_names)
 
 
 def extract_information(

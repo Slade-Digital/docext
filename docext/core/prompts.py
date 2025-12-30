@@ -81,7 +81,7 @@ def get_tables_messages(
                 ],
                 {
                     "type": "text",
-                    "text": f"Return the table as an markdown table:\n {_get_tables_output_format(columns_names)}. If a cell is not found, return '' for that column. Do not give any explanation.",
+                    "text": f"Return ONLY ONE table in markdown format with exactly these columns:\n {_get_tables_output_format(columns_names)}.\n\nIMPORTANT:\n- Return ONLY the requested table, not all tables in the document\n- Use exactly {len(columns_names)} columns as specified\n- If a cell is not found, return '' for that column\n- If the table does not exist in the document, return an empty table with just the header row\n- Do not include any other tables, explanations, or text",
                 },
             ],
         },
