@@ -55,11 +55,11 @@ TEMPLATES_FIELDS = {
     "accord 📄": [
         {
             "field_name": "insured_name",
-            "description": "The primary legal entity name from the 'NAMED INSURED' section. Extract ONLY the main company name BEFORE any 'DBA:', 'D/B/A:', 'aka', or similar indicators. Stop at the first comma, semicolon, or DBA indicator. Example: if the field shows 'Xander Bicycle Corp, DBA: Retrospec Bicycles', extract only 'Xander Bicycle Corp'.",
+            "description": "The legal business name from the Named Insured field, stopping before any explicit DBA indicator. Extract everything before 'DBA:', 'DBA', 'D/B/A:', 'D/B/A', 'doing business as', or 'aka'. Include commas if they are part of the legal entity name (e.g., 'Acme, LLC'). Do not include alternate business names.",
         },
         {
             "field_name": "dba_names",
-            "description": "Extract ONLY the alternate business names that appear AFTER 'DBA:', 'D/B/A:', 'doing business as', 'aka', 'also known as', semicolons, or commas in the named insured field. Do NOT include the primary legal name. Return as comma-separated list. Example: if the field shows 'Xander Bicycle Corp, DBA: Retrospec Bicycles, Critical Cycles', extract 'Retrospec Bicycles, Critical Cycles'. If no DBA indicators are present, return empty string ''.",
+            "description": "Alternate business names that appear after DBA indicators in the Named Insured field. Extract all names that come after 'DBA:', 'DBA', 'D/B/A:', 'D/B/A', 'doing business as', or 'aka'. If multiple DBAs are listed, separate them with commas. If no DBA indicator exists, return ''.",
         },
         {
             "field_name": "mailing_street",
@@ -91,7 +91,7 @@ TEMPLATES_FIELDS = {
         },
         {
             "field_name": "business_phone",
-            "description": "The business phone number of the insured party, may be labeled as 'Business Phone', 'Phone', 'Tel', or in the contact information section. Return in standard phone format.",
+            "description": "The business phone number found anywhere on the form, including in the Named Insured section, contact information area, or phone fields. Look for labels like 'Phone', 'Tel', 'Business Phone', or phone number patterns like (XXX) XXX-XXXX. If multiple numbers exist, use the primary business number. If not found, return ''.",
         },
         {
             "field_name": "primary_business_operations",
@@ -99,7 +99,7 @@ TEMPLATES_FIELDS = {
         },
         {
             "field_name": "premises_json",
-            "description": "Extract ALL premise locations from the 'PREMISES', 'LOCATIONS', or 'SCHEDULE OF LOCATIONS' section as a JSON array. Each premise should be an object with these keys: 'premise_type' (location designation like 'Main Office', 'Branch', or empty string if not stated), 'premise_street' (street address), 'premise_street2' (suite/unit or empty string), 'premise_city', 'premise_state' (2-letter code), 'premise_zip', 'premise_description' (additional notes or empty string). Do NOT include the mailing address from the Named Insured section. Only extract locations explicitly listed in the premises/locations section. If no premises are listed, return empty array []. Example format: [{\"premise_type\": \"Main Office\", \"premise_street\": \"123 Main St\", \"premise_street2\": \"\", \"premise_city\": \"New York\", \"premise_state\": \"NY\", \"premise_zip\": \"10001\", \"premise_description\": \"\"}]",
+            "description": "Extract ALL premise locations from sections labeled 'PREMISES', 'LOCATIONS', or 'SCHEDULE OF LOCATIONS' as a JSON array. Each premise must be an object with keys: 'premise_type' (ONLY if text like 'Main Office', 'Branch', 'Warehouse' is explicitly visible next to the address, otherwise use empty string), 'premise_street', 'premise_street2', 'premise_city', 'premise_state', 'premise_zip', 'premise_description'. CRITICAL: Do NOT include the mailing address. Do NOT invent or assume premise_type values - only use what is explicitly written. If the premises section only shows an address without a type label, use empty string for premise_type. Return empty array [] if no premises section exists.",
         },
     ],
 }
