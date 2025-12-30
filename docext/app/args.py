@@ -47,7 +47,7 @@ def parse_args():
     parser.add_argument(
         "--max_num_imgs",
         type=int,
-        default=5,
+        default=10,
         help="Maximum number of images to process in a single prompt.",
     )
     parser.add_argument(
