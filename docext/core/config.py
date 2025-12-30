@@ -55,15 +55,15 @@ TEMPLATES_FIELDS = {
     "accord 📄": [
         {
             "field_name": "insured_name",
-            "description": "The legal business name from the Named Insured field, stopping before any explicit DBA indicator. Extract everything before 'DBA:', 'DBA', 'D/B/A:', 'D/B/A', 'doing business as', or 'aka'. Include commas if they are part of the legal entity name (e.g., 'Acme, LLC'). Do not include alternate business names.",
+            "description": "Legal business name only. Stop at first 'DBA', 'D/B/A', or 'aka'. Example: 'ABC Corp, DBA: XYZ' → extract 'ABC Corp'. Include LLC, Inc, Corp in name.",
         },
         {
             "field_name": "dba_names",
-            "description": "Alternate business names that appear after DBA indicators in the Named Insured field. Extract all names that come after 'DBA:', 'DBA', 'D/B/A:', 'D/B/A', 'doing business as', or 'aka'. If multiple DBAs are listed, separate them with commas. If no DBA indicator exists, return ''.",
+            "description": "Found in the APPLICANT INFORMATION section under the NAME box. Business names after 'DBA', 'D/B/A', or 'aka' only. Example: 'ABC Corp, DBA: XYZ, DEF' → extract 'XYZ, DEF'. If no DBA/aka appears, return empty string ''.",
         },
         {
             "field_name": "business_phone",
-            "description": "The business phone number found anywhere on the form, including in the Named Insured section, contact information area, or phone fields. Look for labels like 'Phone', 'Tel', 'Business Phone', or phone number patterns like (XXX) XXX-XXXX. If multiple numbers exist, use the primary business number. If not found, return ''.",
+            "description": "The business phone number found in the APPLICANT INFORMATION section. Look for the label 'BUSINESS PHONE', 'Business Phone', or phone number patterns like (XXX) XXX-XXXX. If multiple numbers exist, use the primary business number. If not found, return ''.",
         },
         {
             "field_name": "mailing_street",
