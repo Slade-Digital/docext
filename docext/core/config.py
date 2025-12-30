@@ -58,8 +58,28 @@ TEMPLATES_FIELDS = {
             "description": "The full legal name of the named insured from the 'NAMED INSURED' section. Extract only the name, do not include the address.",
         },
         {
-            "field_name": "mailing_address",
-            "description": "The complete mailing address of the named insured including street address, city, state, and ZIP code. Do not include the name, only the address.",
+            "field_name": "dba_names",
+            "description": "All 'Doing Business As' (DBA) names, trade names, or alternate business names associated with the named insured. Look for indicators like 'DBA:', 'D/B/A:', 'doing business as', 'aka', 'also known as', or additional company names after semicolons, commas, or in parentheses following the legal name. Return as comma-separated list if multiple DBAs exist, or return empty string '' if no DBAs are present.",
+        },
+        {
+            "field_name": "mailing_street",
+            "description": "The street address (number and street name) from the mailing address. Example: '123 Main St' or '456 Oak Avenue'. Do not include suite/unit numbers, city, state, or ZIP.",
+        },
+        {
+            "field_name": "mailing_street2",
+            "description": "The secondary address line from the mailing address such as suite, unit, apartment, or floor number. Example: 'Suite 200' or 'Unit 5B'. Return empty string '' if not provided.",
+        },
+        {
+            "field_name": "mailing_city",
+            "description": "The city name from the mailing address. Example: 'New York' or 'Boston'.",
+        },
+        {
+            "field_name": "mailing_state",
+            "description": "The state abbreviation from the mailing address. Example: 'NY' or 'CA'. Use 2-letter state code.",
+        },
+        {
+            "field_name": "mailing_zip",
+            "description": "The ZIP code from the mailing address. Example: '10001' or '02134-1234'. Include the full ZIP+4 if present.",
         },
         {
             "field_name": "proposed_eff_date",
@@ -100,16 +120,28 @@ TEMPLATES_TABLES = {
     ],
     "accord 📄": [
         {
-            "field_name": "premise_address",
-            "description": "Extract only the street address, city, state, and ZIP code from each premise location. Do NOT include descriptors like 'Main Office' or 'Main Garage' - only the physical address.",
-        },
-        {
             "field_name": "premise_type",
             "description": "Extract the location type or designation (such as 'Main Office', 'Main Garage', 'Branch', 'Warehouse') if present in the premise information. If the cell only contains an address with no type designation, return empty string.",
         },
         {
-            "field_name": "premise_building_number",
-            "description": "The building number, unit number, or suite number associated with the premise, if specified. Return empty string if not provided.",
+            "field_name": "premise_street",
+            "description": "The street address (number and street name) from each premise location. Example: '123 Main St' or '456 Oak Avenue'. Do not include suite/unit numbers, city, state, or ZIP.",
+        },
+        {
+            "field_name": "premise_street2",
+            "description": "The secondary address line such as suite, unit, building, or floor number. Example: 'Suite 200' or 'Bldg 1'. Return empty string if not provided.",
+        },
+        {
+            "field_name": "premise_city",
+            "description": "The city name from the premise address. Example: 'New York' or 'Boston'.",
+        },
+        {
+            "field_name": "premise_state",
+            "description": "The state abbreviation from the premise address. Example: 'NY' or 'CA'. Use 2-letter state code.",
+        },
+        {
+            "field_name": "premise_zip",
+            "description": "The ZIP code from the premise address. Example: '10001' or '02134-1234'. Include the full ZIP+4 if present.",
         },
         {
             "field_name": "premise_description",

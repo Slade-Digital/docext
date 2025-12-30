@@ -198,7 +198,12 @@ def format_for_insurance_system(
             # Categorize by field name
             if 'eff_date' in field_name or 'exp_date' in field_name:
                 result["policy_info"][field_name] = field_data
-            elif 'insured_name' in field_name or 'mailing_address' in field_name or 'phone' in field_name:
+            elif (
+                'insured_name' in field_name
+                or 'dba_names' in field_name
+                or 'mailing_' in field_name
+                or 'phone' in field_name
+            ):
                 result["insured_party"][field_name] = field_data
             elif 'business' in field_name or 'operations' in field_name:
                 result["business_info"][field_name] = field_data
