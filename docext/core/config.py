@@ -52,7 +52,7 @@ TEMPLATES_FIELDS = {
         {"field_name": "nationality", "description": "Nationality"},
         {"field_name": "gender", "description": "Gender"},
     ],
-    "accord 📄": [
+    "accord": [
         {
             "field_name": "insured_name",
             "description": "Legal business name only. Stop at first 'DBA', 'D/B/A', or 'aka'. Example: 'ABC Corp, DBA: XYZ' → extract 'ABC Corp'. Include LLC, Inc, Corp in name.",

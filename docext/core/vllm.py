@@ -14,7 +14,7 @@ class VLLMServer:
         model_name: str,
         host: str = "0.0.0.0",
         port: int = 8000,
-        max_model_len: int = 25000,
+        max_model_len: int = 30000,
         gpu_memory_utilization: float = 0.98,
         max_num_imgs: int = 10,
         vllm_start_timeout: int = 1000,
